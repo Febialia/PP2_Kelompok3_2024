@@ -1,5 +1,7 @@
 package controller;
 
+
+import model.PenjemputanMapper;
 import view.MainView;
 import view.HistoryView;
 import view.LatestStatusView;
@@ -20,6 +22,7 @@ public class MainController {
         // Add listener for "Lihat Penjemputan"
         this.view.addLihatPenjemputanListener(new showLatestStatus());
         this.view.addLihatHistoryListener(new showHistory());
+       
     }
 
     class showLatestStatus implements ActionListener {
@@ -33,6 +36,7 @@ public class MainController {
             penjemputanView.setVisible(true); 
         }
     }
+
     class showHistory implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -44,5 +48,5 @@ public class MainController {
             penjemputanView.setVisible(true); 
         }
     }
-    
+
 }

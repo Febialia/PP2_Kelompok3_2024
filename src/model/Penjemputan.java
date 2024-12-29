@@ -6,10 +6,12 @@ public class Penjemputan {
     private int id_permintaan;
     private String status;
     private int point;
-    private String tanggal_penjemputan;
-    private String statusPenjemputan;
+    private String tanggal_penjemputan;  // Gunakan java.sql.Timestamp jika perlu
     private String namaKurir;
     private String waktuPenjemputan;
+    private String lokasi;
+    private String jenisSampah;
+    private int poinDidapatkan;
 
     // Setter methods
     public void setId(int id) {
@@ -35,7 +37,19 @@ public class Penjemputan {
     public void setTanggalPenjemputan(String tanggal_penjemputan) {
         this.tanggal_penjemputan = tanggal_penjemputan;
     }
-
+    
+    public void setLokasi(String lokasi) { 
+        this.lokasi = lokasi; 
+    }
+    
+    public void setJenisSampah(String jenisSampah) { 
+        this.jenisSampah = jenisSampah; 
+    }
+    
+    public void setPoinDidapatkan(int poinDidapatkan) { 
+        this.poinDidapatkan = poinDidapatkan; 
+    }
+    
     // Getter methods
     public int getId() {
         return id;
@@ -60,16 +74,23 @@ public class Penjemputan {
     public String getTanggalPenjemputan() {
         return tanggal_penjemputan;
     }
+    
+    public String getLokasi() { 
+        return lokasi; 
+    }
+    
+    public String getJenisSampah() { 
+        return jenisSampah; 
+    }
+    
+    public int getPoinDidapatkan() { 
+        return poinDidapatkan; 
+    }
 
-
-    // Getter dan Setter
-    public String getStatusPenjemputan() { return statusPenjemputan; }
-    public void setStatusPenjemputan(String statusPenjemputan) { this.statusPenjemputan = statusPenjemputan; }
-
+    // Getter dan Setter tambahan jika diperlukan
     public String getNamaKurir() { return namaKurir; }
     public void setNamaKurir(String namaKurir) { this.namaKurir = namaKurir; }
 
     public String getWaktuPenjemputan() { return waktuPenjemputan; }
     public void setWaktuPenjemputan(String waktuPenjemputan) { this.waktuPenjemputan = waktuPenjemputan; }
-
 }
