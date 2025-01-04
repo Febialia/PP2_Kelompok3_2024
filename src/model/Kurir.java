@@ -2,14 +2,15 @@ package model;
 
 public class Kurir {
     private int id;
-    private String nama_kurir;
+    private String namaKurir;  // Mengganti nama_kurir dengan namaKurir sesuai konvensi Java
 
-    // Konstruktor
+    // Konstruktor default
     public Kurir() {}
 
-    public Kurir(int id, String nama_kurir) {
+    // Konstruktor dengan parameter
+    public Kurir(int id, String namaKurir) {
         this.id = id;
-        this.nama_kurir = nama_kurir;
+        this.namaKurir = namaKurir;
     }
 
     // Getter dan Setter
@@ -22,16 +23,16 @@ public class Kurir {
     }
 
     public String getNamaKurir() {
-        return nama_kurir;
+        return namaKurir;
     }
 
-    public void setNamaKurir(String nama_kurir) {
-        this.nama_kurir = nama_kurir;
+    public void setNamaKurir(String namaKurir) {
+        this.namaKurir = namaKurir;
     }
 
     // toString untuk representasi string dari objek Kurir
     @Override
     public String toString() {
-        return "Kurir [id=" + id + ", nama_kurir=" + nama_kurir + "]";
+        return "Kurir [id=" + id + ", namaKurir=" + namaKurir + "]";  // Sesuaikan dengan variabel namaKurir
     }
 }
