@@ -12,4 +12,9 @@ public interface PenjemputanMapper {
 
     @Select("SELECT p.id as id, p.status AS status,k.nama_kurir as namaKurir,pe.tanggal_penjemputan AS waktuPenjemputan FROM penjemputan p JOIN kurir k ON p.id_kurir = k.id JOIN permintaan pe ON p.id_permintaan = pe.id WHERE p.status = 'Selesai' ORDER BY p.tanggal_penjemputan DESC")
     List<Penjemputan> getHistory();
+
+    @Delete("DELETE FROM penjemputan WHERE id_permintaan = #{idPermintaan}")
+    void deleteByPermintaanId(int idPermintaan);
+
+    
 }

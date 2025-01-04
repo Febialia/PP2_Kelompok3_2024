@@ -17,12 +17,13 @@ public class MainView extends JFrame {
     private JButton btnEditTracking = new JButton("Edit Tracking");
     
     private JButton btnLihatPenjemputan = new JButton("Lihat Penjemputan");
+    private JButton btnPermintaan = new JButton("Lihat Permintaan");
     private JButton btnLihatHistory = new JButton("Lihat History");
     private JButton btnLihatPoint = new JButton("Lihat Point");
 
     public MainView() {
         setTitle("Menu Utama");
-        setSize(300, 450);
+        setSize(300, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -31,7 +32,7 @@ public class MainView extends JFrame {
 
         panel.add(createButtonGroup("Tambah", btnTambahKurir, btnTambahPermintaan, btnTambahPenjemputan, btnTambahTracking));
         panel.add(createButtonGroup("Edit", btnEditKurir, btnEditPermintaan, btnEditPenjemputan, btnEditTracking));
-        panel.add(createButtonGroup("Lihat", btnLihatPenjemputan, btnLihatHistory, btnLihatPoint));
+        panel.add(createButtonGroup("Lihat", btnLihatPenjemputan, btnPermintaan, btnLihatHistory, btnLihatPoint));
 
         add(panel);
     }
@@ -85,6 +86,10 @@ public class MainView extends JFrame {
 
     public void addLihatPenjemputanListener(ActionListener listener) {
         btnLihatPenjemputan.addActionListener(listener);
+    }
+
+    public void addLihatPermintaanListener(ActionListener listener) {
+        btnPermintaan.addActionListener(listener);
     }
 
     public void addLihatHistoryListener(ActionListener listener) {
