@@ -2,10 +2,13 @@ package controller;
 
 import view.PermintaanView;
 import model.PermintaanMapper;
+import model.MyBatisUtil;
 import model.Permintaan;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+
+import org.apache.ibatis.session.SqlSession;
 
 public class PermintaanController {
     private PermintaanView view;
@@ -26,9 +29,18 @@ public class PermintaanController {
             int confirm = JOptionPane.showConfirmDialog(view, 
                 "Hapus data ini?", "Konfirmasi", 
                 JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                mapper.deletePermintaan(id);
-                loadPermintaanData();
+                if (confirm == JOptionPane.YES_OPTION) {
+                    // Membuka session baru
+                    try (SqlSession session = MyBatisUtil.getSqlSession()) {
+                        PermintaanMapper mapperSession = session.getMapper(PermintaanMapper.class);
+                        mapperSession.deletePermintaan(id);
+                        session.commit();
+                        loadPermintaanData();
+                        JOptionPane.showMessageDialog(view, "Data berhasil dihapus.");
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(view, "Terjadi kesalahan saat menghapus data.");
+                        ex.printStackTrace();
+                    }
             }
         } else {
             JOptionPane.showMessageDialog(view, 

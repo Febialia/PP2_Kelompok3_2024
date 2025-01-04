@@ -27,5 +27,6 @@ public class Permintaan {
     public String getTanggalPenjemputan() { return tanggalPenjemputan; }
     public void setTanggalPenjemputan(String tanggalPenjemputan) { this.tanggalPenjemputan = tanggalPenjemputan; }
     
+    
 }
 

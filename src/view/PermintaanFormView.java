@@ -92,7 +92,7 @@ public class PermintaanFormView extends JFrame {
         txtNamaPelanggan.setText(permintaan.getNamaPelanggan());
         txtAlamat.setText(permintaan.getAlamat());
         txtJenisSampah.setText(permintaan.getJenisSampah());
-        txtBeratSampah.setText(permintaan.getBeratSampah());
+        txtJenisSampah.setText(permintaan.getJenisSampah());
         spnTanggalPenjemputan.setValue(java.sql.Date.valueOf(permintaan.getTanggalPenjemputan()));
     }
 
