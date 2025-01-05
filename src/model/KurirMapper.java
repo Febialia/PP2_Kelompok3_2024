@@ -35,7 +35,6 @@ public interface KurirMapper {
         // Mendapatkan kurir berdasarkan ID
         @Select("SELECT * FROM kurir WHERE id = #{id}")
         Kurir getKurirById(int id);
-    }
     // Mendapatkan kurir berdasarkan ID
     @Select("SELECT * FROM kurir WHERE id = #{id}")
     Kurir getKurirById(int id);
