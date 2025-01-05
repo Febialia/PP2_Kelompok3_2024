@@ -11,22 +11,16 @@ public interface PenjemputanMapper {
 
     // Mendapatkan status terbaru dengan filter status tertentu
     @Select("SELECT p.id AS id, p.status AS status, k.nama_kurir AS namaKurir, " +
-            "pe.tanggal_penjemputan AS waktuPenjemputan " +
+            "p.tanggal_penjemputan AS waktuPenjemputan " +
             "FROM penjemputan p " +
             "JOIN kurir k ON p.id_kurir = k.id " +
             "JOIN permintaan pe ON p.id_permintaan = pe.id " +
             "WHERE p.status IN ('Dalam Perjalanan', 'Selesai') " +
-            "ORDER BY pe.tanggal_penjemputan DESC")
+            "ORDER BY p.tanggal_penjemputan DESC")
     List<Penjemputan> getLatestStatus();
 
     // Mendapatkan riwayat penjemputan lengkap
-    @Select("SELECT p.id AS id, p.status AS status, k.nama_kurir AS namaKurir, " +
-            "pe.tanggal_penjemputan AS waktuPenjemputan, pe.lokasi AS lokasi, " +
-            "pe.jenis_sampah AS jenisSampah, p.point AS poinDidapatkan " +
-            "FROM penjemputan p " +
-            "JOIN kurir k ON p.id_kurir = k.id " +
-            "JOIN permintaan pe ON p.id_permintaan = pe.id " +
-            "ORDER BY pe.tanggal_penjemputan DESC")
+    @Select("SELECT p.id AS id, p.status AS status,  k.nama_kurir AS namaKurir, p.tanggal_penjemputan AS waktuPenjemputan, t.lokasi AS lokasi, pe.jenis_sampah AS jenisSampah, p.point AS poinDidapatkan FROM penjemputan p JOIN kurir k ON p.id_kurir = k.id JOIN permintaan pe ON p.id_permintaan = pe.id JOIN tracking t ON p.id = t.id_penjemputan ORDER BY p.tanggal_penjemputan DESC")
     List<Penjemputan> getHistory();
 
 
@@ -37,12 +31,12 @@ public interface PenjemputanMapper {
 
     // Mendapatkan riwayat lengkap dengan data terstruktur
     @Select("SELECT p.id AS id, p.status AS status, k.nama_kurir AS namaKurir, " +
-            "pe.tanggal_penjemputan AS waktuPenjemputan, pe.lokasi AS lokasi, " +
+            "p.tanggal_penjemputan AS waktuPenjemputan, pe.lokasi AS lokasi, " +
             "pe.jenis_sampah AS jenisSampah, p.point AS poinDidapatkan " +
             "FROM penjemputan p " +
             "JOIN kurir k ON p.id_kurir = k.id " +
             "JOIN permintaan pe ON p.id_permintaan = pe.id " +
-            "ORDER BY pe.tanggal_penjemputan DESC")
+            "ORDER BY p.tanggal_penjemputan DESC")
     List<Penjemputan> getCompleteHistory();
 
     
@@ -59,12 +53,12 @@ public interface PenjemputanMapper {
 
     // Mendapatkan data berdasarkan status tertentu
     @Select("SELECT p.id AS id, p.status AS status, k.nama_kurir AS namaKurir, " +
-            "pe.tanggal_penjemputan AS waktuPenjemputan, pe.lokasi AS lokasi, " +
+            "p.tanggal_penjemputan AS waktuPenjemputan, pe.lokasi AS lokasi, " +
             "pe.jenis_sampah AS jenisSampah, p.point AS poinDidapatkan " +
             "FROM penjemputan p " +
             "JOIN kurir k ON p.id_kurir = k.id " +
             "JOIN permintaan pe ON p.id_permintaan = pe.id " +
             "WHERE p.status = #{status} " +
-            "ORDER BY pe.tanggal_penjemputan DESC")
+            "ORDER BY p.tanggal_penjemputan DESC")
     List<Penjemputan> getPenjemputanByStatus(@Param("status") String status);
 }
