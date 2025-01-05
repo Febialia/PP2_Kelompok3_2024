@@ -1,32 +1,40 @@
 package model;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 public class Permintaan {
     private int id;
-    private String namaPelanggan;
+    private String nama_pelanggan;
     private String alamat;
-    private String jenisSampah;
-    private String beratSampah;
-    private String tanggalPenjemputan;
+    private String jenis_sampah;
+    private String berat_sampah;
+    private Date tanggal_penjemputan;
     
     // Getters and setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     
-    public String getNamaPelanggan() { return namaPelanggan; }
-    public void setNamaPelanggan(String namaPelanggan) { this.namaPelanggan = namaPelanggan; }
+    public String getNamaPelanggan() { return nama_pelanggan; }
+    public void setNamaPelanggan(String namaPelanggan) { this.nama_pelanggan = namaPelanggan; }
     
     public String getAlamat() { return alamat; }
     public void setAlamat(String alamat) { this.alamat = alamat; }
     
-    public String getJenisSampah() { return jenisSampah; }
-    public void setJenisSampah(String jenisSampah) { this.jenisSampah = jenisSampah; }
+    public String getJenisSampah() { return jenis_sampah; }
+    public void setJenisSampah(String jenisSampah) { this.jenis_sampah = jenisSampah; }
     
-    public String getBeratSampah() { return beratSampah; }
-    public void setBeratSampah(String beratSampah) { this.beratSampah = beratSampah; }
+    public String getBeratSampah() { return berat_sampah; }
+    public void setBeratSampah(String beratSampah) { this.berat_sampah = beratSampah; }
 
-    public String getTanggalPenjemputan() { return tanggalPenjemputan; }
-    public void setTanggalPenjemputan(String tanggalPenjemputan) { this.tanggalPenjemputan = tanggalPenjemputan; }
+    public Date getTanggalPenjemputan() { return tanggal_penjemputan; }
+    public void setTanggalPenjemputan(Date tanggalPenjemputan) { this.tanggal_penjemputan = tanggalPenjemputan; }
     
-    
+    // Method tambahan untuk memformat tanggal jika diperlukan
+    public String getFormattedTanggalPenjemputan() {
+        if (tanggal_penjemputan != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            return sdf.format(tanggal_penjemputan);
+        }
+        return null;
+    }
 }
-

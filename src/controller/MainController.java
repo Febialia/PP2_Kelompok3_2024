@@ -11,6 +11,7 @@ import model.PermintaanMapper;
 
 import org.apache.ibatis.session.SqlSession;
 
+import controller.MainController.EditPermintaanListener;
 import controller.MainController.showHistory;
 import controller.MainController.showLatestStatus;
 import controller.MainController.showPermintaan;
@@ -42,22 +43,24 @@ public class MainController {
     }
 
     class TambahPermintaanListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            PermintaanFormView formView = new PermintaanFormView();
-            formView.addSimpanListener(event -> {
-                PermintaanMapper mapper = session.getMapper(PermintaanMapper.class);
-                Permintaan permintaan = formView.getPermintaanFromForm();
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        PermintaanFormView formView = new PermintaanFormView();
+        formView.addSimpanListener(event -> {
+            PermintaanMapper mapper = session.getMapper(PermintaanMapper.class);
+            Permintaan permintaan = formView.getPermintaanFromForm();
 
-                if (permintaan != null) {
-                    mapper.insertPermintaan(permintaan);
-                    JOptionPane.showMessageDialog(view, "Permintaan berhasil ditambahkan!");
-                    formView.dispose();
-                }
-            });
-            formView.setVisible(true);
-        }
+            if (permintaan != null) {
+                // Insert the new "Permintaan"
+                mapper.insertPermintaan(permintaan);
+                session.commit(); // Commit changes to the database
+                JOptionPane.showMessageDialog(view, "Permintaan berhasil ditambahkan!");
+                formView.dispose();
+            }
+        });
+        formView.setVisible(true);
     }
+}
 
      class EditPermintaanListener implements ActionListener {
         @Override

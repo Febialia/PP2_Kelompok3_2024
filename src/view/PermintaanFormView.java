@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.Date;
 
+
 import model.Permintaan;
 
 public class PermintaanFormView extends JFrame {
@@ -71,7 +72,7 @@ public class PermintaanFormView extends JFrame {
         String alamat = txtAlamat.getText();
         String jenisSampah = txtJenisSampah.getText();
         String beratSampah = txtBeratSampah.getText();
-        Date tanggalPenjemputan = (Date) spnTanggalPenjemputan.getValue();
+        java.util.Date utilDate = (java.util.Date) spnTanggalPenjemputan.getValue();
 
         if (namaPelanggan.isEmpty() || alamat.isEmpty() || jenisSampah.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Semua field harus diisi.");
@@ -83,8 +84,10 @@ public class PermintaanFormView extends JFrame {
         permintaan.setAlamat(alamat);
         permintaan.setJenisSampah(jenisSampah);
         permintaan.setBeratSampah(beratSampah);
-        permintaan.setTanggalPenjemputan(tanggalPenjemputan.toString());
         
+        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+        permintaan.setTanggalPenjemputan(sqlDate);
+
         return permintaan;
     }
 
@@ -92,8 +95,10 @@ public class PermintaanFormView extends JFrame {
         txtNamaPelanggan.setText(permintaan.getNamaPelanggan());
         txtAlamat.setText(permintaan.getAlamat());
         txtJenisSampah.setText(permintaan.getJenisSampah());
-        txtJenisSampah.setText(permintaan.getJenisSampah());
-        spnTanggalPenjemputan.setValue(java.sql.Date.valueOf(permintaan.getTanggalPenjemputan()));
+        txtBeratSampah.setText(permintaan.getBeratSampah());
+        
+        java.util.Date utilDate = new java.util.Date(permintaan.getTanggalPenjemputan().getTime());
+        spnTanggalPenjemputan.setValue(utilDate);
     }
 
     public void addSimpanListener(ActionListener listener) {
