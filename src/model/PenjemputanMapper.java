@@ -29,7 +29,14 @@ public interface PenjemputanMapper {
             "ORDER BY p.tanggal_penjemputan DESC")
     List<Penjemputan> getCompleteHistory();
     
-    @Select("SELECT * FROM penjemputan WHERE status_penjemputan = #{status}")
-    List<Penjemputan> getPenjemputanByStatus(@Param("status") String status);
+   @Select("SELECT SUM(p.berat) AS totalBerat, SUM(p.point) AS totalPoint " +
+        "FROM penjemputan p " +
+        "JOIN permintaan pe ON p.id_permintaan = pe.id " +
+        "WHERE pe.jenis_sampah = 'Laptop'")
+    @Results({
+        @Result(property = "totalBerat", column = "totalBerat"),
+        @Result(property = "totalPoint", column = "totalPoint")
+    })
+    TotalPointInfo getTotalBeratDanPointElektronik();
 
 }
