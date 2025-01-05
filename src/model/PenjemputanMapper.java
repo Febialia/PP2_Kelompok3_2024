@@ -39,6 +39,18 @@ public interface PenjemputanMapper {
             "ORDER BY pe.tanggal_penjemputan DESC")
     List<Penjemputan> getCompleteHistory();
 
+    
+   @Select("SELECT SUM(p.berat) AS totalBerat, SUM(p.point) AS totalPoint " +
+        "FROM penjemputan p " +
+        "JOIN permintaan pe ON p.id_permintaan = pe.id " +
+        "WHERE pe.jenis_sampah = 'Laptop'")
+    @Results({
+        @Result(property = "totalBerat", column = "totalBerat"),
+        @Result(property = "totalPoint", column = "totalPoint")
+    })
+    TotalPointInfo getTotalBeratDanPointElektronik();
+
+
     // Mendapatkan data berdasarkan status tertentu
     @Select("SELECT p.id AS id, p.status AS status, k.nama_kurir AS namaKurir, " +
             "pe.tanggal_penjemputan AS waktuPenjemputan, pe.lokasi AS lokasi, " +

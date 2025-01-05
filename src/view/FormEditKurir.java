@@ -55,10 +55,11 @@ public class FormEditKurir extends JFrame {
     }
 
     private void loadKurirData() {
-    try {
-        List<Kurir> kurirList = mapper.getAllKurirs(); // Menggunakan mapper dari parameter
+    try (SqlSession session = MyBatisUtil.openSession()) {
+        KurirMapper mapper = session.getMapper(KurirMapper.class);
+        List<Kurir> kurirList = mapper.getAllKurirs();
         System.out.println("Data Kurir: " + kurirList); // Debugging
-        tableModel.setRowCount(0); // Hapus data lama
+        tableModel.setRowCount(0);
         for (Kurir kurir : kurirList) {
             tableModel.addRow(new Object[]{kurir.getId(), kurir.getNamaKurir()});
         }
@@ -67,10 +68,8 @@ public class FormEditKurir extends JFrame {
         JOptionPane.showMessageDialog(this, "Gagal memuat data kurir!", "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
-    
+
  
-
-
     private void editKurir() {
     int selectedRow = table.getSelectedRow();
     if (selectedRow != -1) {

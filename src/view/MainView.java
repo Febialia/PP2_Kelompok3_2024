@@ -8,17 +8,16 @@ import java.awt.Dimension;
 import controller.KurirController;
 
 public class MainView extends JFrame {
-    
     private JButton btnTambahKurir = new JButton("Tambah Kurir");
     private JButton btnTambahPermintaan = new JButton("Tambah Permintaan");
     private JButton btnTambahPenjemputan = new JButton("Tambah Penjemputan");
     private JButton btnTambahTracking = new JButton("Tambah Tracking");
-    
+
     private JButton btnEditKurir = new JButton("Edit Kurir");
     private JButton btnEditPermintaan = new JButton("Edit Permintaan");
     private JButton btnEditPenjemputan = new JButton("Edit Penjemputan");
     private JButton btnEditTracking = new JButton("Edit Tracking");
-    
+
     private JButton btnLihatPenjemputan = new JButton("Lihat Penjemputan");
     private JButton btnLihatHistory = new JButton("Lihat History");
     private JButton btnLihatPoint = new JButton("Lihat Point");
@@ -29,8 +28,10 @@ public class MainView extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        // Panel utama
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
 
          // Tombol "Tambah"
         panel.add(createButtonGroup("Tambah", btnTambahKurir, btnTambahPermintaan, btnTambahPenjemputan, btnTambahTracking));
@@ -58,6 +59,7 @@ public class MainView extends JFrame {
         });
 
 
+        // Menambahkan panel ke frame
         add(panel);
     }
 
