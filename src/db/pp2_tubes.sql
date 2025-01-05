@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 20, 2024 at 03:07 PM
+-- Generation Time: Jan 04, 2025 at 05:30 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.4
 
@@ -41,7 +41,11 @@ INSERT INTO `kurir` (`id`, `nama_kurir`) VALUES
 (2, 'Rudi'),
 (3, 'Andi'),
 (4, 'Siti'),
-(5, 'Dedi');
+(5, 'Dedi'),
+(7, '323'),
+(8, 'wa'),
+(10, 'BHADRIKASSS'),
+(11, 'ASA');
 
 -- --------------------------------------------------------
 
@@ -64,10 +68,37 @@ CREATE TABLE `penjemputan` (
 
 INSERT INTO `penjemputan` (`id`, `id_kurir`, `id_permintaan`, `status`, `point`, `tanggal_penjemputan`) VALUES
 (1, 1, 1, 'Dalam Perjalanan', 5, '2024-12-21'),
-(2, 2, 2, 'Selesai', 10, '2024-12-22'),
+(2, 2, 2, 'Belum Dimulai', 102, '2024-12-22'),
 (3, 3, 3, 'Dalam Perjalanan', 7, '2024-12-23'),
-(4, 4, 4, 'Dalam Perjalanan', 3, '2024-12-24'),
-(5, 5, 5, 'Belum Dimulai', 0, '2024-12-25');
+(4, 1, 1, 'Dalam Perjalanan', 3, '2024-12-24'),
+(5, 5, 5, 'Belum Dimulai', 0, '2024-12-25'),
+(9, 1, 1, 'Belum Dimulai', 2, '2025-01-03'),
+(10, 1, 1, 'Belum Dimulai', 2, '2025-01-03'),
+(11, 1, 1, 'Belum Dimulai', 2, '2025-01-03'),
+(12, 1, 1, 'Belum Dimulai', 2, '2025-01-03'),
+(15, 1, 1, 'Belum Dimulai', 2, '2025-01-03'),
+(16, 1, 1, 'Belum Dimulai', 2, '2025-01-03'),
+(17, 1, 1, 'Selesai', 12, '2025-01-03'),
+(18, 1, 1, 'Dalam Perjalanan', 21, '2025-01-03'),
+(20, 1, 1, 'Dalam Perjalanan', 21, '2025-01-03'),
+(21, 1, 1, 'Dalam Perjalanan', 12, '2025-01-03'),
+(23, 1, 1, 'Belum Dimulai', 2, '2025-01-04'),
+(24, 1, 1, 'Belum Dimulai', 21, '2025-01-04'),
+(25, 1, 1, 'Belum Dimulai', 2, '2025-01-04'),
+(32, 1, 1, 'Belum Dimulai', 2, '2025-01-04'),
+(33, 1, 1, 'Belum Dimulai', 221212, '2025-01-04'),
+(34, 1, 1, 'Belum Dimulai', 12, '2025-01-04'),
+(38, 5, 5, 'Belum Dimulai', 21, '2025-01-04'),
+(39, 8, 3, 'Selesai', 2, '2025-01-04'),
+(43, 1, 1, 'Belum Dimulai', 112, '2025-01-04'),
+(46, 10, 5, 'Belum Dimulai', 12, '2025-01-04'),
+(47, 10, 1, 'Dalam Perjalanan', 121, '2025-01-04'),
+(48, 11, 1, 'Belum Dimulai', 1112, '2025-01-04'),
+(49, 1, 1, 'Selesai', 12, '2025-01-04'),
+(50, 1, 1, 'Dalam Perjalanan', 12, '2025-01-04'),
+(51, 1, 1, 'Belum Dimulai', 12, '2025-01-04'),
+(52, 1, 1, 'Dalam Perjalanan', 12, '2025-01-04'),
+(53, 7, 5, 'Belum Dimulai', 12, '2025-01-04');
 
 -- --------------------------------------------------------
 
@@ -79,7 +110,8 @@ CREATE TABLE `permintaan` (
   `id` int NOT NULL,
   `nama_pelanggan` varchar(255) NOT NULL,
   `alamat` varchar(255) NOT NULL,
-  `total_sampah` int NOT NULL,
+  `jenis_sampah` varchar(255) NOT NULL,
+  `berat_sampah` int NOT NULL,
   `tanggal_penjemputan` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -87,12 +119,12 @@ CREATE TABLE `permintaan` (
 -- Dumping data for table `permintaan`
 --
 
-INSERT INTO `permintaan` (`id`, `nama_pelanggan`, `alamat`, `total_sampah`, `tanggal_penjemputan`) VALUES
-(1, 'Ahmad', 'Jl. Merdeka No. 123', 15, '2024-12-21'),
-(2, 'Sari', 'Jl. Pahlawan No. 45', 25, '2024-12-22'),
-(3, 'Joko', 'Jl. Kenanga No. 67', 30, '2024-12-23'),
-(4, 'Lia', 'Jl. Surya No. 89', 10, '2024-12-24'),
-(5, 'Tono', 'Jl. Bintang No. 56', 20, '2024-12-25');
+INSERT INTO `permintaan` (`id`, `nama_pelanggan`, `alamat`, `jenis_sampah`, `berat_sampah`, `tanggal_penjemputan`) VALUES
+(1, 'Ahmad', 'Jl. Merdeka No. 123', 'HP', 15, '2024-12-21'),
+(2, 'Sari', 'Jl. Pahlawan No. 45', 'Battery', 25, '2024-12-22'),
+(3, 'Joko', 'Jl. Kenanga No. 67', 'Laptop', 30, '2024-12-23'),
+(4, 'Lia', 'Jl. Surya No. 89', 'Computer', 10, '2024-12-24'),
+(5, 'Tono', 'Jl. Bintang No. 56', 'HP', 20, '2024-12-25');
 
 -- --------------------------------------------------------
 
@@ -160,13 +192,13 @@ ALTER TABLE `tracking`
 -- AUTO_INCREMENT for table `kurir`
 --
 ALTER TABLE `kurir`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `penjemputan`
 --
 ALTER TABLE `penjemputan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `permintaan`
