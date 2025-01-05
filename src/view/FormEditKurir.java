@@ -68,9 +68,8 @@ public class FormEditKurir extends JFrame {
         JOptionPane.showMessageDialog(this, "Gagal memuat data kurir!", "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
+
  
-
-
     private void editKurir() {
     int selectedRow = table.getSelectedRow();
     if (selectedRow != -1) {

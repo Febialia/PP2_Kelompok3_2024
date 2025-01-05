@@ -1,4 +1,4 @@
-package model;
+    package model;
 
 import org.apache.ibatis.annotations.*;
 
@@ -18,9 +18,24 @@ public interface KurirMapper {
     @Update("UPDATE kurir SET nama_kurir = #{namaKurir} WHERE id = #{id}")
     void updateKurir(Kurir kurir);
 
-    @Delete("DELETE FROM kurir WHERE id = #{id}")
-    void deleteKurirById(int id);
 
+
+
+        // Menambahkan kurir baru, otomatis mendapatkan nilai ID yang di-generate
+        @Insert("INSERT INTO kurir (nama_kurir) VALUES (#{nama_kurir})")
+        @Options(useGeneratedKeys = true, keyProperty = "id")  // Mengambil ID yang dihasilkan secara otomatis
+        int insertKurir(Kurir kurir);
+
+        @Update("UPDATE kurir SET nama_kurir = #{nama_kurir} WHERE id = #{id}")
+        void updateKurir(Kurir kurir);
+
+        @Delete("DELETE FROM kurir WHERE id = #{id}")
+        void deleteKurirById(int id);
+
+        // Mendapatkan kurir berdasarkan ID
+        @Select("SELECT * FROM kurir WHERE id = #{id}")
+        Kurir getKurirById(int id);
+    }
     // Mendapatkan kurir berdasarkan ID
     @Select("SELECT * FROM kurir WHERE id = #{id}")
     Kurir getKurirById(int id);

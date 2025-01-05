@@ -32,7 +32,8 @@ public class MainView extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        // Tombol "Tambah"
+
+         // Tombol "Tambah"
         panel.add(createButtonGroup("Tambah", btnTambahKurir, btnTambahPermintaan, btnTambahPenjemputan, btnTambahTracking));
         btnTambahKurir.addActionListener(e -> {
             KurirController controller = new KurirController();
@@ -46,12 +47,17 @@ public class MainView extends JFrame {
             controller.handleEditKurir();
         });
 
-        // Tombol "Lihat"
         panel.add(createButtonGroup("Lihat", btnLihatPenjemputan, btnLihatHistory, btnLihatPoint));
-        btnLihatPoint.addActionListener(e -> {
-            PointView pointView = new PointView();
-            pointView.setVisible(true);
+        btnLihatPenjemputan.addActionListener(e -> {
+            LatestStatusView latestStatusView = new LatestStatusView();
+            latestStatusView.setVisible(true);
         });
+
+        btnLihatHistory.addActionListener(e -> {
+            HistoryView historyView = new HistoryView();
+            historyView.setVisible(true);
+        });
+
 
         // Menambahkan panel ke frame
         add(panel);
