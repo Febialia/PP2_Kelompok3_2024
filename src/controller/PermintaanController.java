@@ -43,34 +43,42 @@ public class PermintaanController {
                     }
             }
         } else {
-            JOptionPane.showMessageDialog(view, 
-                "Pilih data yang akan dihapus");
+            JOptionPane.showMessageDialog(view, "Pilih data yang akan dihapus");
         }
         
     });
     
-    loadPermintaanData();
+    view.addRefreshListener(e ->{
+        loadPermintaanData();
+    });
+   
 
     }
     
     private void loadPermintaanData() {
-        List<Permintaan> permintaanList = mapper.getAllPermintaan();
-        Object[][] data = new Object[permintaanList.size()][6];
-        
-        for (int i = 0; i < permintaanList.size(); i++) {
-            Permintaan p = permintaanList.get(i);
-            data[i] = new Object[]{
-                p.getId(),
-                p.getNamaPelanggan(),
-                p.getAlamat(),
-                p.getJenisSampah(),
-                p.getBeratSampah(),
-                p.getTanggalPenjemputan()
-            };
+        try (SqlSession session = MyBatisUtil.getSqlSession()) {
+            // Gunakan session baru untuk memastikan data terbaru
+            PermintaanMapper refreshMapper = session.getMapper(PermintaanMapper.class);
+            List<Permintaan> permintaanList = refreshMapper.getAllPermintaan();
+            
+            Object[][] data = new Object[permintaanList.size()][6];
+            for (int i = 0; i < permintaanList.size(); i++) {
+                Permintaan p = permintaanList.get(i);
+                data[i] = new Object[]{
+                    p.getId(),
+                    p.getNamaPelanggan(),
+                    p.getAlamat(),
+                    p.getJenisSampah(),
+                    p.getBeratSampah(),
+                    p.getTanggalPenjemputan()
+                };
+            }
+            view.setTableData(data);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(view, 
+                "Terjadi kesalahan saat memuat data: " + e.getMessage());
+            e.printStackTrace();
         }
-        
-        view.setTableData(data);
     }
-
     
 }

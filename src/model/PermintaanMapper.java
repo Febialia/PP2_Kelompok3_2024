@@ -1,7 +1,6 @@
 package model;
 
 import java.util.List;
-
 import org.apache.ibatis.annotations.*;
 
 public interface PermintaanMapper {
@@ -27,15 +26,18 @@ public interface PermintaanMapper {
     })
     Permintaan getPermintaanById(int id);
 
-    @Insert("INSERT INTO permintaan (nama_pelanggan, alamat, jenis_sampah, tanggal_penjemputan, berat_sampah) " +
-            "VALUES (#{namaPelanggan}, #{alamat}, #{jenisSampah}, #{berat_sampah}), #{tanggalPenjemputan}")
+    @Insert("INSERT INTO permintaan " + 
+            "(nama_pelanggan, alamat, jenis_sampah, berat_sampah, tanggal_penjemputan) " +
+            "VALUES " +
+            "(#{namaPelanggan}, #{alamat}, #{jenisSampah}, #{beratSampah}, #{tanggalPenjemputan})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insertPermintaan(Permintaan permintaan);
 
-    @Update("UPDATE permintaan SET nama_pelanggan = #{namaPelanggan}, " +
+    @Update("UPDATE permintaan SET " +
+            "nama_pelanggan = #{namaPelanggan}, " +
             "alamat = #{alamat}, " +
             "jenis_sampah = #{jenisSampah}, " +
-            "berat_sampah = #{berat_sampah}, " +
+            "berat_sampah = #{beratSampah}, " +
             "tanggal_penjemputan = #{tanggalPenjemputan} " +
             "WHERE id = #{id}")
     void updatePermintaan(Permintaan permintaan);
@@ -45,5 +47,4 @@ public interface PermintaanMapper {
 
     @Update("UPDATE permintaan SET isDeleted = TRUE WHERE id = #{id}")
     void softDeletePermintaan(int id);
-
 }

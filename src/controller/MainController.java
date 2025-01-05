@@ -78,6 +78,7 @@ public class MainController {
                             Permintaan updatedPermintaan = formView.getPermintaanFromForm();
                             updatedPermintaan.setId(id);
                             mapper.updatePermintaan(updatedPermintaan);
+                            session.commit();
                             JOptionPane.showMessageDialog(view, "Permintaan berhasil diupdate!");
                             formView.dispose();
                         });
