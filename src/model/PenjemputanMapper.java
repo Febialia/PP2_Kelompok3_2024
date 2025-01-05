@@ -39,5 +39,4 @@ public interface PenjemputanMapper {
     })
     TotalPointInfo getTotalBeratDanPointElektronik();
 
-    
 }
