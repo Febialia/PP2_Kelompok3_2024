@@ -29,6 +29,12 @@ public interface PenjemputanMapper {
             "ORDER BY pe.tanggal_penjemputan DESC")
     List<Penjemputan> getHistory();
 
+
+    @Delete("DELETE FROM penjemputan WHERE id_permintaan = #{idPermintaan}")
+    void deleteByPermintaanId(int idPermintaan);
+
+    
+
     // Mendapatkan riwayat lengkap dengan data terstruktur
     @Select("SELECT p.id AS id, p.status AS status, k.nama_kurir AS namaKurir, " +
             "pe.tanggal_penjemputan AS waktuPenjemputan, pe.lokasi AS lokasi, " +
