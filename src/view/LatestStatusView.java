@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -13,13 +15,28 @@ public class LatestStatusView extends JFrame {
     public LatestStatusView() {
         setTitle("Penjemputan View");
         setSize(400, 300);
-        setLocationRelativeTo(null); // Posisi di tengah layar
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         // Define table columns
         String[] columnNames = {"Status Penjemputan", "Nama Kurir", "Waktu Penjemputan"};
-    tableModel = new DefaultTableModel(columnNames, 0);
-    table = new JTable(tableModel);
+        tableModel = new DefaultTableModel(columnNames, 0);
+        table = new JTable(tableModel);
+
+        // Menambahkan mouse listener untuk table
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = table.rowAtPoint(e.getPoint());
+                int col = table.columnAtPoint(e.getPoint());
+                
+                // Cek jika klik pada kolom Nama Kurir (index 1)
+                if (col == 1 && row >= 0) {
+                    String courierName = (String) table.getValueAt(row, col);
+                    showTrackingPopup(courierName, row);
+                }
+            }
+        });
 
         // Add table to scroll pane
         JScrollPane scrollPane = new JScrollPane(table);
@@ -29,15 +46,15 @@ public class LatestStatusView extends JFrame {
 
         // Tombol Tambah 
         JButton btnTambah = new JButton("Tambah");
-        btnTambah.addActionListener(e->tambahTracking());
+        btnTambah.addActionListener(e -> tambahTracking());
 
         // Tombol Edit
         JButton btnEdit = new JButton("Edit");
-        btnEdit.addActionListener(e ->editTracking());
+        btnEdit.addActionListener(e -> editTracking());
         
         // Tombol Delete
         JButton btnDelete = new JButton("Hapus");
-        btnDelete.addActionListener(e->deleteTracking());
+        btnDelete.addActionListener(e -> deleteTracking());
         
         buttonPanel.add(btnTambah);
         buttonPanel.add(btnEdit);
@@ -47,8 +64,6 @@ public class LatestStatusView extends JFrame {
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
         
         add(mainPanel);
-
-        // Menempatkan window di tengah
         setLocationRelativeTo(null);
     }
 
@@ -61,14 +76,6 @@ public class LatestStatusView extends JFrame {
                 penjemputan.getWaktuPenjemputan()
             });
         }
-    }
-
-    @SuppressWarnings("unused")
-    private void showTrackingPopup(String courierName) {
-        JOptionPane.showMessageDialog(this,
-            "Detail Tracking untuk kurir: " + courierName,
-            "Detail Tracking",
-            JOptionPane.INFORMATION_MESSAGE);
     }
     
     private void deleteTracking() {
@@ -86,14 +93,13 @@ public class LatestStatusView extends JFrame {
             "Konfirmasi Hapus",
             JOptionPane.YES_NO_OPTION);
             
-            if (confirm == JOptionPane.YES_OPTION) {
-                // Menggunakan tableModel bukan model
-                tableModel.removeRow(selectedRow);
-                JOptionPane.showMessageDialog(this,
-                    "Data berhasil dihapus!",
-                    "Informasi",
-                    JOptionPane.INFORMATION_MESSAGE);
-            }
+        if (confirm == JOptionPane.YES_OPTION) {
+            tableModel.removeRow(selectedRow);
+            JOptionPane.showMessageDialog(this,
+                "Data berhasil dihapus!",
+                "Informasi",
+                JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     private void editTracking() {
@@ -106,12 +112,10 @@ public class LatestStatusView extends JFrame {
             return;
         }
 
-        // Membuat dialog untuk edit data
         JDialog editDialog = new JDialog(this, "Edit Data Tracking", true);
         editDialog.setLayout(new GridLayout(4, 2, 10, 10));
         editDialog.setSize(300, 200);
 
-        // Komponen untuk input
         JTextField txtStatus = new JTextField((String) table.getValueAt(selectedRow, 0));
         JTextField txtNama = new JTextField((String) table.getValueAt(selectedRow, 1));
         JTextField txtWaktu = new JTextField((String) table.getValueAt(selectedRow, 2));
@@ -123,7 +127,6 @@ public class LatestStatusView extends JFrame {
         editDialog.add(new JLabel("Waktu:"));
         editDialog.add(txtWaktu);
 
-        // Tombol Update
         JButton btnUpdate = new JButton("Update");
         btnUpdate.addActionListener(e -> {
             if(txtStatus.getText().isEmpty() || txtNama.getText().isEmpty() || txtWaktu.getText().isEmpty()) {
@@ -142,7 +145,6 @@ public class LatestStatusView extends JFrame {
             JOptionPane.showMessageDialog(this, "Data berhasil diupdate!");
         });
 
-        // Tombol Batal
         JButton btnBatal = new JButton("Batal");
         btnBatal.addActionListener(e -> editDialog.dispose());
 
@@ -154,12 +156,10 @@ public class LatestStatusView extends JFrame {
     }
 
     private void tambahTracking() {
-        // Membuat dialog untuk tambah data
         JDialog addDialog = new JDialog(this, "Tambah Data Tracking", true);
         addDialog.setLayout(new GridLayout(4, 2, 10, 10));
         addDialog.setSize(300, 200);
         
-        // Komponen untuk input
         JTextField txtStatus = new JTextField();
         JTextField txtNama = new JTextField();
         JTextField txtWaktu = new JTextField();
@@ -171,7 +171,6 @@ public class LatestStatusView extends JFrame {
         addDialog.add(new JLabel("Waktu:"));
         addDialog.add(txtWaktu);
         
-        // Tombol Simpan
         JButton btnSimpan = new JButton("Simpan");
         btnSimpan.addActionListener(e -> {
             if(txtStatus.getText().isEmpty() || txtNama.getText().isEmpty() || txtWaktu.getText().isEmpty()) {
@@ -182,7 +181,7 @@ public class LatestStatusView extends JFrame {
                 return;
             }
             
-            model.addRow(new Object[]{
+            tableModel.addRow(new Object[]{
                 txtStatus.getText(),
                 txtNama.getText(),
                 txtWaktu.getText()
@@ -192,7 +191,6 @@ public class LatestStatusView extends JFrame {
             JOptionPane.showMessageDialog(this, "Data berhasil ditambahkan!");
         });
         
-        // Tombol Batal
         JButton btnBatal = new JButton("Batal");
         btnBatal.addActionListener(e -> addDialog.dispose());
         
@@ -202,8 +200,34 @@ public class LatestStatusView extends JFrame {
         addDialog.setLocationRelativeTo(this);
         addDialog.setVisible(true);
     }
+
+    private void showTrackingPopup(String courierName, int row) {
+        JDialog trackingDialog = new JDialog(this, "Detail Tracking Kurir", true);
+        trackingDialog.setLayout(new BorderLayout(10, 10));
+        trackingDialog.setSize(350, 200);
     
-
-
+        JPanel detailPanel = new JPanel(new GridLayout(3, 2, 5, 5));
+        detailPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    
+        detailPanel.add(new JLabel("Nama Kurir:"));
+        detailPanel.add(new JLabel(courierName));
+        
+        detailPanel.add(new JLabel("Status:"));
+        detailPanel.add(new JLabel((String) table.getValueAt(row, 0)));
+        
+        detailPanel.add(new JLabel("Waktu:"));
+        detailPanel.add(new JLabel((String) table.getValueAt(row, 2)));
+    
+        JButton closeButton = new JButton("Tutup");
+        closeButton.addActionListener(e -> trackingDialog.dispose());
+    
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(closeButton);
+    
+        trackingDialog.add(detailPanel, BorderLayout.CENTER);
+        trackingDialog.add(buttonPanel, BorderLayout.SOUTH);
+    
+        trackingDialog.setLocationRelativeTo(this);
+        trackingDialog.setVisible(true);
     }
-
+}

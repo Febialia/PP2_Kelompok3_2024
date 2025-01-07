@@ -5,8 +5,6 @@ public class Kurir {
     private String nama_kurir;
 
     // Konstruktor
-    public Kurir() {}
-
     public Kurir(int id, String nama_kurir) {
         this.id = id;
         this.nama_kurir = nama_kurir;
