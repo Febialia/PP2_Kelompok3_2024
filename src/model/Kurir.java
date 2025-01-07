@@ -4,11 +4,8 @@ public class Kurir {
     private int id;
     private String namaKurir;  // Mengganti nama_kurir dengan namaKurir sesuai konvensi Java
 
-    // Konstruktor default
-    public Kurir() {}
-
-    // Konstruktor dengan parameter
-    public Kurir(int id, String namaKurir) {
+    // Konstruktor
+    public Kurir(int id, String nama_kurir) {
         this.id = id;
         this.namaKurir = namaKurir;
     }

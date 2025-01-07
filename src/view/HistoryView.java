@@ -30,6 +30,32 @@ public class HistoryView extends JFrame {
         table = new JTable(tableModel);
 
         JScrollPane scrollPane = new JScrollPane(table);
+
+        JPanel mainPanel = new JPanel(new BorderLayout());
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        // Tombol Tambah 
+        JButton btnTambah = new JButton("Tambah");
+        // btnTambah.addActionListener();
+
+        // Tombol Edit
+        JButton btnEdit = new JButton("Edit");
+        // btnEdit.addActionListener();
+        
+        // Tombol Delete
+        JButton btnDelete = new JButton("Hapus");
+        // btnDelete.addActionListener();
+        
+        buttonPanel.add(btnTambah);
+        buttonPanel.add(btnEdit);
+        buttonPanel.add(btnDelete);
+
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+        
+        add(mainPanel);
+
         add(scrollPane, BorderLayout.CENTER);
         add(createSearchFilterPanel(), BorderLayout.NORTH);
 

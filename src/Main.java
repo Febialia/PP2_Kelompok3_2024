@@ -1,6 +1,6 @@
 import view.MainView;
-
-import javax.swing.*;
+import controller.MainController;
+import javax.swing.table.DefaultTableModel;
 
 public class Main {
     public static void main(String[] args) {
