@@ -1,78 +1,108 @@
-
 package controller;
+import java.awt.event.*;
+import java.security.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
+import javax.swing.JOptionPane;
+
+import org.apache.ibatis.session.SqlSession;
+
+import model.Penjemputan;
+import model.PenjemputanMapper;
 import model.Kurir;
 import model.KurirMapper;
-import model.MyBatisUtil;
-import org.apache.ibatis.session.SqlSession;
-import view.FormEditKurir;
-
-import javax.swing.*;
+import view.EditKurirView;
+import view.KurirPdf;
+import view.StatusPenjemputanPdf;
+import view.KurirView;
+import view.TambahKurirView;
+import view.TambahPenjemputanView;
 
 public class KurirController {
-    public void handleTambahKurir() {
-        String namaKurir = JOptionPane.showInputDialog("Masukkan nama kurir:");
-        if (namaKurir != null && !namaKurir.isEmpty()) {
-            try (SqlSession session = MyBatisUtil.openSession()) {
-                KurirMapper mapper = session.getMapper(KurirMapper.class);
-                Kurir kurir = new Kurir();
-                kurir.setNamaKurir(namaKurir); // Setter tetap menggunakan namaKurir dari model
-                mapper.insertKurir(kurir); // Mapper akan menangani pemetaan ke kolom nama_kurir
-                session.commit();
-                JOptionPane.showMessageDialog(null, "Kurir berhasil ditambahkan!");
-            } catch (Exception e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Gagal menambahkan kurir: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
+
+    public KurirView view;
+    public KurirMapper mapper;
+    public SqlSession session; 
+
+    public KurirController(KurirView view, KurirMapper mapper, SqlSession session) {
+        this.view = view;
+        this.mapper = mapper;
+        this.session = session;
+        loadKurirData();
+        this.view.addKurir(new addKurir());
+        this.view.editKurir(new editKurir());
+        this.view.exportKurir(new ExportListener());
+        
+        // NAVBAR
+        SidebarController sidebarController = new SidebarController(this.view, this.session);
+        this.view.redirectHome(sidebarController.new btnHome());
+        this.view.redirectStatusPenjemputan(sidebarController.new btnStatusPenjemputan());
+        this.view.redirectKurir(sidebarController.new btnKurir());
+        this.view.redirectRiwayat(sidebarController.new btnRiwayat());
+        this.view.redirectTotalBeratPoint(sidebarController.new btnBeratPoint());
+        this.view.redirectPermintaan(sidebarController.new btnPermintaan());
+        this.view.redirectTracking(sidebarController.new btnTracking());
+    }
+
+    public void loadKurirData() {
+        List<Kurir> kurirList = mapper.getAllKurirs();
+        view.setTableData(kurirList);
+    }
+
+    class addKurir implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            TambahKurirView addKurirView = new TambahKurirView();
+            KurirMapper kurirMapper = session.getMapper(KurirMapper.class);
+            new TambahKurirController(addKurirView, kurirMapper, session, KurirController.this);
+            // Pastikan tampilan ditampilkan
+            addKurirView.setVisible(true); 
+            KurirController.this.view.setVisible(false);
         }
     }
 
-    public void handleEditKurir() {
-        try (SqlSession session = MyBatisUtil.openSession()) {
-            KurirMapper mapper = session.getMapper(KurirMapper.class);
-            // Menampilkan FormEditKurir setelah memuat mapper dan session
-            FormEditKurir formEditKurir = new FormEditKurir(mapper, session);
-            formEditKurir.setVisible(true); // Menampilkan form untuk mengedit kurir
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Gagal mengedit kurir: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+    class editKurir implements MouseListener {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            EditKurirView editKurirView = new EditKurirView();
+            KurirMapper kurirMapper = session.getMapper(KurirMapper.class);
+            
+            // Get the selected row
+            int selectedRow = KurirController.this.view.getTable().getSelectedRow();
 
-    public void handleHapusKurir() {
-        String idKurirStr = JOptionPane.showInputDialog("Masukkan ID kurir yang ingin dihapus:");
-        if (idKurirStr != null && !idKurirStr.isEmpty()) {
-            try {
-                int idKurir = Integer.parseInt(idKurirStr);
-                try (SqlSession session = MyBatisUtil.openSession()) {
-                    KurirMapper mapper = session.getMapper(KurirMapper.class);
-                    mapper.deleteKurirById(idKurir);
-                    session.commit();
-                    JOptionPane.showMessageDialog(null, "Kurir berhasil dihapus!");
-                }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "ID Kurir harus berupa angka!", "Error", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Gagal menghapus kurir: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            if (selectedRow != -1) {
+                int id = (int) KurirController.this.view.getTableModel().getValueAt(selectedRow, 0);
+                System.out.println(id);
+
+                // Pass the LatestStatusController instance to editKurirController
+                new EditKurirController(editKurirView, kurirMapper, session, id, KurirController.this);
+                editKurirView.setVisible(true);
+                KurirController.this.view.setVisible(false);
             }
         }
+    
+        @Override
+        public void mousePressed(MouseEvent e) {}
+    
+        @Override
+        public void mouseReleased(MouseEvent e) {}
+    
+        @Override
+        public void mouseEntered(MouseEvent e) {}
+    
+        @Override
+        public void mouseExited(MouseEvent e) {}
     }
-
-    public void handleLihatSemuaKurir() {
-        try (SqlSession session = MyBatisUtil.openSession()) {
-            KurirMapper mapper = session.getMapper(KurirMapper.class);
-            java.util.List<Kurir> kurirList = mapper.getAllKurirs();
-            StringBuilder sb = new StringBuilder("Daftar Kurir:\n");
-            for (Kurir kurir : kurirList) {
-                sb.append("ID: ").append(kurir.getId())
-                  .append(", Nama: ").append(kurir.getNamaKurir())
-                  .append("\n");
-            }
-            JOptionPane.showMessageDialog(null, sb.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Gagal memuat daftar kurir: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    
+    class ExportListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            List<Kurir> kurirs = mapper.getAllKurirs();
+            KurirPdf pdf = new KurirPdf();
+            String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
+            pdf.exportPdf(kurirs, "kurir_"+ timeStamp);
+            JOptionPane.showMessageDialog(view, "Data exported to PDF.");
         }
     }
 }

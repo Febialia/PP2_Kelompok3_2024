@@ -1,84 +1,110 @@
 package controller;
-
-import view.PermintaanView;
-import model.PermintaanMapper;
-import model.MyBatisUtil;
-import model.Permintaan;
+import java.awt.event.*;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+import model.Kurir;
 
 import org.apache.ibatis.session.SqlSession;
 
+import model.Penjemputan;
+import model.PenjemputanMapper;
+import model.Permintaan;
+import model.PermintaanMapper;
+import view.EditPermintaanView;
+import view.KurirPdf;
+import view.PermintaanView;
+import view.KurirView;
+import view.PermintaanPdf;
+import view.TambahKurirView;
+import view.TambahPenjemputanView;
+import view.TambahPermintaanView;
+
 public class PermintaanController {
-    private PermintaanView view;
-    private PermintaanMapper mapper;
-    
-    public PermintaanController(PermintaanView view, PermintaanMapper mapper) {
+
+    public PermintaanView view;
+    public PermintaanMapper mapper;
+    public SqlSession session; 
+
+    public PermintaanController(PermintaanView view, PermintaanMapper mapper, SqlSession session) {
         this.view = view;
         this.mapper = mapper;
-        loadPermintaanData();
+        this.session = session;
+        loadKurirData();
+        this.view.addPermintaan(new addPermintaan());
+        this.view.editPermintaan(new editPermintaan());
+        this.view.exportPdf(new ExportListener());
 
-        view.addKembaliListener(e -> {
-            view.dispose();
-        });
-
-        view.addHapusListener(e -> {
-        int id = view.getSelectedId();
-        if (id != -1) {
-            int confirm = JOptionPane.showConfirmDialog(view, 
-                "Hapus data ini?", "Konfirmasi", 
-                JOptionPane.YES_NO_OPTION);
-                if (confirm == JOptionPane.YES_OPTION) {
-                    // Membuka session baru
-                    try (SqlSession session = MyBatisUtil.getSqlSession()) {
-                        PermintaanMapper mapperSession = session.getMapper(PermintaanMapper.class);
-                        mapperSession.deletePermintaan(id);
-                        session.commit();
-                        loadPermintaanData();
-                        JOptionPane.showMessageDialog(view, "Data berhasil dihapus.");
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(view, "Terjadi kesalahan saat menghapus data.");
-                        ex.printStackTrace();
-                    }
-            }
-        } else {
-            JOptionPane.showMessageDialog(view, "Pilih data yang akan dihapus");
-        }
-        
-    });
-    
-    view.addRefreshListener(e ->{
-        loadPermintaanData();
-    });
-   
-
+        // NAVBAR
+        SidebarController sidebarController = new SidebarController(this.view, this.session);
+        this.view.redirectHome(sidebarController.new btnHome());
+        this.view.redirectStatusPenjemputan(sidebarController.new btnStatusPenjemputan());
+        this.view.redirectKurir(sidebarController.new btnKurir());
+        this.view.redirectRiwayat(sidebarController.new btnRiwayat());
+        this.view.redirectTotalBeratPoint(sidebarController.new btnBeratPoint());
+        this.view.redirectPermintaan(sidebarController.new btnPermintaan());
+        this.view.redirectTracking(sidebarController.new btnTracking());
     }
-    
-    private void loadPermintaanData() {
-        try (SqlSession session = MyBatisUtil.getSqlSession()) {
-            // Gunakan session baru untuk memastikan data terbaru
-            PermintaanMapper refreshMapper = session.getMapper(PermintaanMapper.class);
-            List<Permintaan> permintaanList = refreshMapper.getAllPermintaan();
+
+    public void loadKurirData() {
+        List<Permintaan> permintaanList = mapper.getAllpermintaan();
+        view.setTableData(permintaanList);
+    }
+
+    class addPermintaan implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            TambahPermintaanView addPermintaanView = new TambahPermintaanView();
+            PermintaanMapper permintaanMapper = session.getMapper(PermintaanMapper.class);
+            new TambahPermintaanController(addPermintaanView, permintaanMapper, session, PermintaanController.this);
+            // Pastikan tampilan ditampilkan
+            addPermintaanView.setVisible(true); 
+            PermintaanController.this.view.setVisible(false);
+        }
+    }
+
+    class editPermintaan implements MouseListener {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            EditPermintaanView editPermintaanView = new EditPermintaanView();
+            PermintaanMapper permintaanMapper = session.getMapper(PermintaanMapper.class);
             
-            Object[][] data = new Object[permintaanList.size()][6];
-            for (int i = 0; i < permintaanList.size(); i++) {
-                Permintaan p = permintaanList.get(i);
-                data[i] = new Object[]{
-                    p.getId(),
-                    p.getNamaPelanggan(),
-                    p.getAlamat(),
-                    p.getJenisSampah(),
-                    p.getBeratSampah(),
-                    p.getTanggalPenjemputan()
-                };
+            // Get the selected row
+            int selectedRow = PermintaanController.this.view.getTable().getSelectedRow();
+
+            if (selectedRow != -1) {
+                int id = (int) PermintaanController.this.view.getTableModel().getValueAt(selectedRow, 0);
+                System.out.println(id);
+
+                // Pass the LatestStatusController instance to editPermintaanController
+                new EditPermintaanController(editPermintaanView, permintaanMapper, session, id, PermintaanController.this);
+                editPermintaanView.setVisible(true);
+                PermintaanController.this.view.setVisible(false);
             }
-            view.setTableData(data);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(view, 
-                "Terjadi kesalahan saat memuat data: " + e.getMessage());
-            e.printStackTrace();
         }
+    
+        @Override
+        public void mousePressed(MouseEvent e) {}
+    
+        @Override
+        public void mouseReleased(MouseEvent e) {}
+    
+        @Override
+        public void mouseEntered(MouseEvent e) {}
+    
+        @Override
+        public void mouseExited(MouseEvent e) {}
     }
     
+    class ExportListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            List<Permintaan> permintaanList = mapper.getAllpermintaan();
+            PermintaanPdf pdf = new PermintaanPdf();
+            String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
+            pdf.exportPdf(permintaanList, "permintaan_"+ timeStamp);
+            JOptionPane.showMessageDialog(view, "Data exported to PDF.");
+        }
+    }
 }
