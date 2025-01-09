@@ -1,26 +1,24 @@
 package model;
 
+import java.io.IOException;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
-import java.io.IOException;
-import java.io.Reader;
-
 public class MyBatisUtil {
     private static SqlSessionFactory sqlSessionFactory;
 
-    static {
+    static{
         try {
-            Reader reader = Resources.getResourceAsReader("mybatis-config.xml");
-            sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+            sqlSessionFactory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsStream("mybatis-config.xml"));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
-    public static SqlSession openSession() {
+    public static SqlSession getSqlSession(){
         return sqlSessionFactory.openSession();
     }
+
 }

@@ -17,8 +17,8 @@
 <mappers>
     <mapper class="model.PenjemputanMapper"/> <!-- Menggunakan class untuk mappers berbasis Java -->
     <mapper class="model.KurirMapper"/>
-	<mapper class="model.TrackingMapper"/>
-	<mapper class="model.PermintaanMapper"/>
+    <mapper class="model.PermintaanMapper"/>
+    <mapper class="model.TrackingMapper"/>
 </mappers>
 
 </configuration>

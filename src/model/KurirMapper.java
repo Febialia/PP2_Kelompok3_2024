@@ -1,41 +1,30 @@
-    package model;
+package model;
 
 import org.apache.ibatis.annotations.*;
-
 import java.util.List;
 
 public interface KurirMapper {
-
-    // Mendapatkan semua data kurir
+    
     @Select("SELECT * FROM kurir")
     List<Kurir> getAllKurirs();
 
-    // Menambahkan kurir baru, otomatis mendapatkan nilai ID yang di-generate
-    @Insert("INSERT INTO kurir (nama_kurir) VALUES (#{namaKurir})")
-    @Options(useGeneratedKeys = true, keyProperty = "id")  // Mengambil ID yang dihasilkan secara otomatis
+    @Insert("INSERT INTO kurir (nama_kurir) VALUES (#{nama_kurir})")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertKurir(Kurir kurir);
 
-    @Update("UPDATE kurir SET nama_kurir = #{namaKurir} WHERE id = #{id}")
-    void updateKurir(Kurir kurir);
+    @Insert("INSERT INTO kurir (nama_kurir) VALUES (#{nama_kurir})")
+    @Options(useGeneratedKeys = true)
+    int tambahKurir(@Param("nama_kurir") String namaKurir);
 
+    @Update("UPDATE kurir SET nama_kurir = #{nama_kurir} WHERE id = #{id}")
+    void editKurir(@Param("id") int idKurir, @Param("nama_kurir") String namaKurir);
 
+    @Delete("DELETE FROM kurir WHERE id = #{id}")
+    void deleteKurir(@Param("id") int idKurir);
 
-
-        // Menambahkan kurir baru, otomatis mendapatkan nilai ID yang di-generate
-        @Insert("INSERT INTO kurir (nama_kurir) VALUES (#{nama_kurir})")
-        @Options(useGeneratedKeys = true, keyProperty = "id")  // Mengambil ID yang dihasilkan secara otomatis
-        int insertKurir(Kurir kurir);
-
-        @Update("UPDATE kurir SET nama_kurir = #{nama_kurir} WHERE id = #{id}")
-        void updateKurir(Kurir kurir);
-
-        @Delete("DELETE FROM kurir WHERE id = #{id}")
-        void deleteKurirById(int id);
-
-        // Mendapatkan kurir berdasarkan ID
-        @Select("SELECT * FROM kurir WHERE id = #{id}")
-        Kurir getKurirById(int id);
-    // Mendapatkan kurir berdasarkan ID
     @Select("SELECT * FROM kurir WHERE id = #{id}")
-    Kurir getKurirById(int id);
+    List<Kurir> getKurirById(@Param("id") int idKurir);
+
+    @Select("SELECT COUNT(id) FROM kurir")        
+    int total();
 }
